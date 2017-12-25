@@ -453,7 +453,7 @@ class Module(BaseModule):
         if shared_module is not None and shared_module.optimizer_initialized:
             self.borrow_optimizer(shared_module)
 
-    def reshape(self, data_shapes, label_shapes=None):
+    def reshape(self, data_shapes, label_shapes=None, partial_shaping=False, allow_up_sizing=False):
         """Reshapes the module for new input shapes.
 
         Parameters
@@ -467,7 +467,7 @@ class Module(BaseModule):
         self._data_shapes, self._label_shapes = _parse_data_desc(
             self.data_names, self.label_names, data_shapes, label_shapes)
 
-        self._exec_group.reshape(self._data_shapes, self._label_shapes)
+        self._exec_group.reshape(self._data_shapes, self._label_shapes, partial_shaping=partial_shaping, allow_up_sizing=allow_up_sizing)
 
     def init_optimizer(self, kvstore='local', optimizer='sgd',
                        optimizer_params=(('learning_rate', 0.01),), force_init=False):
